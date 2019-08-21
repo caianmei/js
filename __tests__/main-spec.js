@@ -6,16 +6,16 @@ it('should return multiply table from 2 to 4 when call createMultiplyTable given
 });
 
 it('should return multiply table from 2 to 4 when call createMultiplyTable given -1 and 4', () => {
-    expect(createMultiplyTable(-1, 4))
-        .toBe(null);
+    expect(createMultiplyTable(0.5, 4))
+        .toBe("参数不是整数");
 });
 it('should return multiply table from 2 to 4 when call createMultiplyTable given -1 and 4', () => {
     expect(createMultiplyTable(5, 4))
-        .toBe(null);
+        .toBe("开始值不小于等于结束值");
 });
 it('should return multiply table from 2 to 4 when call createMultiplyTable given -1 and 4', () => {
     expect(createMultiplyTable(0, 100001))
-        .toBe(null);
+        .toBe("开始值与结束值不在1-1000以内");
 });
 
 const printReceipt = require('../settleAndPrintReceipt');

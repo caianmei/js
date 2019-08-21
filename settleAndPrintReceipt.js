@@ -51,17 +51,16 @@ function findBybarcodeFromDB(barcode) {
 
 function countAndPrint(countBarcode) {
     var result = "";
-    result += "Receipts\n------------------------------------------------------------\n";
     if (countBarcode == "输入参数为空") {
         return "输入参数为空";
     }
+    result += "Receipts\n------------------------------------------------------------\n";
     var sum = 0;
     for (var i = 0; i < countBarcode.length; i++) {
         const element = countBarcode[i];
         var barcode = element.barcode;
         var count = element.count;
         var item = findBybarcodeFromDB(barcode);
-        console.log(item);
         var objStr = JSON.stringify(item);
         if (objStr === '{}') {
             var a = barcode + "编号商品不存在"
