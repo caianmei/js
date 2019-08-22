@@ -34,19 +34,26 @@ function isInScope(start, end) {
 
 function createTableWithoutInputCheck(start, end) {
     var result = "";
-    for (var i = start; i < end + 1; i++) {
-        for (var j = start; j <= i; j++) {
-            var str = j + '*' + i + '=' + (i * j);
-            result += str;
-            if (j < i) {
-                result += " ";
-            }
-        }
-        if (i < end) {
-            result += '\n';
-        }
+    for (var i = start; i <= end; i++) {
+        var separator = i === end ? "" : "\n";
+        result += getLine(start, i);
+        result += separator;
     }
     return result;
+}
+
+function getLine(start, i) {
+    var lineResult = "";
+    for (let j = start; j <= i; j++) {
+        var separator = j === i ? "" : " ";
+        lineResult += getExpress(j, i);
+        lineResult += separator;
+    }
+    return lineResult;
+}
+
+function getExpress(fisrtFactor, secondFactor) {
+    return `${fisrtFactor}*${secondFactor}=${fisrtFactor * secondFactor}`;
 }
 
 module.exports = createMultiplyTable;
