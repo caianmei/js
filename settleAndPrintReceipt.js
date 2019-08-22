@@ -1,11 +1,30 @@
 function printReceipt(barcodes) {
     var countBarcode = countItemByBarcode(barcodes);
-    return countAndPrint(countBarcode);
+    var isValidResult = isValid(countBarcode);
+    if (!(isValidResult == "success")) {
+        return isValidResult;
+    }
+
+    var items = getItems(countBarcode);
+    var sumPrice = countSumPrice(items);
+    return print(items, sumPrice);
 }
-function countItemByBarcode(barcodes) {
-    if (barcodes.length == 0) {
+
+function isValid(countBarcode) {
+    if (countBarcode.length == 0) {
         return "输入参数为空";
     }
+    for (var i = 0; i < countBarcode.length; i++) {
+        var item = findBybarcodeFromDB(countBarcode[i]);
+        var objStr = JSON.stringify(item);
+        if (objStr === '{}') {
+            return `${countBarcode[i].barcode}编号商品不存在`;
+        }
+    }
+    return "success";
+}
+
+function countItemByBarcode(barcodes) {
     var arr = [];
     barcodes.sort();
     for (var i = 0; i < barcodes.length;) {
@@ -24,7 +43,39 @@ function countItemByBarcode(barcodes) {
     return arr;
 }
 
-function findBybarcodeFromDB(barcode) {
+function getItems(countBarcode) {
+    var items = [];
+    for (var i = 0; i < countBarcode.length; i++) {
+        items.push(findBybarcodeFromDB(countBarcode[i]));
+    }
+    return items;
+}
+
+function countSumPrice(items) {
+    var sumPrice = 0;
+    for (var i = 0; i < items.length; i++) {
+        sumPrice += Number(items[i].price) * Number(items[i].count);
+    }
+    return sumPrice;
+}
+
+function print(items, sumPrice) {
+    var result = "";
+    result += "Receipts\n------------------------------------------------------------\n";
+    for (var i = 0; i < items.length; i++) {
+        result += getLine(items[i]);
+    }
+    result += "------------------------------------------------------------\n";
+    result += "Price: " + sumPrice;
+
+    return result;
+}
+
+function getLine(item) {
+    return item.name + '\t\t' + item.price + '\t' + item.count + '\n';
+}
+
+function findBybarcodeFromDB(good) {
     var database = [
         { "id": "0001", "name": "Coca Cola", "price": 3 },
         { "id": "0002", "name": "Diet Coke", "price": 4 },
@@ -40,40 +91,15 @@ function findBybarcodeFromDB(barcode) {
     var item = {};
     for (var i = 0; i < database.length; i++) {
         var element = database[i];
-        if (element.id == barcode) {
+        if (element.id === good.barcode) {
+            item.barcode = element.id;
+            item.count = good.count;
             item.name = element.name;
             item.price = element.price;
             break;
         }
     }
     return item;
-}
-
-function countAndPrint(countBarcode) {
-    var result = "";
-    if (countBarcode == "输入参数为空") {
-        return "输入参数为空";
-    }
-    result += "Receipts\n------------------------------------------------------------\n";
-    var sum = 0;
-    for (var i = 0; i < countBarcode.length; i++) {
-        const element = countBarcode[i];
-        var barcode = element.barcode;
-        var count = element.count;
-        var item = findBybarcodeFromDB(barcode);
-        var objStr = JSON.stringify(item);
-        if (objStr === '{}') {
-            var a = barcode + "编号商品不存在"
-            return a;
-        }
-    
-    result = result + item.name + '\t\t' + item.price + '\t' + count + '\n';
-    sum += item.price * count;
-}
-result += "------------------------------------------------------------\n";
-result += "Price: " + sum;
-
-return result;
 }
 
 module.exports = printReceipt;

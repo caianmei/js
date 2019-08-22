@@ -1,7 +1,6 @@
 function createMultiplyTable(start, end) {
     var isCorrect = checkInput(start, end);
     if (!(isCorrect === "success")) {
-        console.log(isCorrect);
         return isCorrect;
     }
     return createTableWithoutInputCheck(start, end);

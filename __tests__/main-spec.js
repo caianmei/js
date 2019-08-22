@@ -18,7 +18,7 @@ it('should return multiply table from 2 to 4 when call createMultiplyTable given
         .toBe("开始值与结束值不在1-1000以内");
 });
 
-const printReceipt = require('../settleAndPrintReceipt');
+ const printReceipt = require('../settleAndPrintReceipt');
 it('should return receipt item sccsv编号商品不存在 when call settleAndPrintReceipt given ["sccsv"]', () => {
     expect(printReceipt(["sccsv"]))
         .toBe("sccsv编号商品不存在");
