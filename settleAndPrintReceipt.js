@@ -14,6 +14,7 @@ function isValid(countBarcode) {
     if (countBarcode.length == 0) {
         return "输入参数为空";
     }
+
     for (var i = 0; i < countBarcode.length; i++) {
         var item = findBybarcodeFromDB(countBarcode[i]);
         var objStr = JSON.stringify(item);
@@ -26,18 +27,18 @@ function isValid(countBarcode) {
 
 function countItemByBarcode(barcodes) {
     var arr = [];
-    barcodes.sort();
+    barcodes.sort();    
     for (var i = 0; i < barcodes.length;) {
         var count = 0;
-        var object = {};
         for (var j = i; j < barcodes.length; j++) {
             if (barcodes[i] === barcodes[j]) {
                 count++;
             }
         }
-        object.barcode = barcodes[i];
-        object.count = count;
-        arr.push(object);
+        arr.push({
+            barcode: barcodes[i],
+            count: count
+        });
         i += count;
     }
     return arr;
